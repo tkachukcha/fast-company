@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Users from "./components/users";
-import api from "./api";
-import SearchStatus from "./components/searchStatus";
+import React, { useState } from 'react';
+import Users from './components/users';
+import api from './api';
+import SearchStatus from './components/searchStatus';
 
 const App = () => {
   const initialUsers = api.users.fetchAll();
@@ -23,19 +23,21 @@ const App = () => {
 
   const renderTable = (usersNum) => {
     if (usersNum !== 0) {
-      return <Users
-        users={users}
-        onDelete={handleUserDelete}
-        onBookmark={handleUserBookmarked}
-      />;
+      return (
+        <Users
+          users={users}
+          onDelete={handleUserDelete}
+          onBookmark={handleUserBookmarked}
+        />
+      );
     } else {
       return;
     }
-  }
+  };
 
   return (
     <>
-      <SearchStatus usersNum={users.length}/>
+      <SearchStatus usersNum={users.length} />
       {renderTable(users.length)}
     </>
   );

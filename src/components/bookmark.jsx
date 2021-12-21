@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 const Bookmark = (props) => {
   const { id, bookmark } = props;
-  let bookmarkIcon = "bi bi-bookmark";
+  let bookmarkIcon = 'bi bi-bookmark';
   if (bookmark) {
-    bookmarkIcon = "bi bi-bookmark-fill";
+    bookmarkIcon = 'bi bi-bookmark-fill';
   }
   return (
     <button onClick={() => props.onBookmark(id)}>

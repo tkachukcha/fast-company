@@ -1,6 +1,6 @@
-import React from "react";
-import Qualities from "./qualities";
-import Bookmark from "./bookmark";
+import React from 'react';
+import Qualities from './qualities';
+import Bookmark from './bookmark';
 
 const User = (props) => {
   const {
@@ -10,7 +10,7 @@ const User = (props) => {
     qualities,
     completedMeetings,
     rate,
-    bookmark,
+    bookmark
   } = props;
   return (
     <tr>
@@ -22,11 +22,7 @@ const User = (props) => {
       <td>{completedMeetings}</td>
       <td>{rate}/5</td>
       <td>
-        <Bookmark 
-          id={_id} 
-          bookmark={bookmark}
-          onBookmark={props.onBookmark} 
-        />
+        <Bookmark id={_id} bookmark={bookmark} onBookmark={props.onBookmark} />
       </td>
       <td>
         <button
