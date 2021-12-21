@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const SearchStatus = (props) => {
   const { usersNum } = props;
@@ -33,5 +34,7 @@ const SearchStatus = (props) => {
 
   return <h2>{renderTotalUsers(usersNum)}</h2>;
 };
-
+SearchStatus.propTypes = {
+  usersNum: PropTypes.number.isRequired
+};
 export default SearchStatus;
