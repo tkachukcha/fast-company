@@ -14,6 +14,11 @@ module.exports = {
   plugins: ['react'],
   rules: {
     semi: [2, 'always'],
-    'no-useless-return': false
+    'no-useless-return': 0,
+    'no-unused-vars': 0,
+    'space-before-function-paren': [
+      'error',
+      { anonymous: 'always', named: 'never' }
+    ]
   }
 };
