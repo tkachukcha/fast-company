@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Users from './components/users';
 import api from './api';
 
 const App = () => {
-  const initialUsers = api.users.fetchAll();
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => {
+      setUsers(data);
+    });
+  }, []);
 
   const handleUserDelete = (id) => {
     setUsers((prevState) => prevState.filter((user) => id !== user._id));
@@ -34,11 +39,7 @@ const App = () => {
     }
   };
 
-  return (
-    <>
-      {renderTable(users.length)}
-    </>
-  );
+  return <>{users && (renderTable(users.length))}</>;
 };
 
 export default App;
