@@ -25,7 +25,6 @@ const GroupList = ({
       ));
       return newItems;
     } else if (Array.isArray(items)) {
-      console.log(selectedItem);
       const newItems = items.map((item) => (
         <li
           key={item[valueProperty]}
