@@ -1,91 +1,80 @@
 import React from 'react';
-import User from './user';
 import PropTypes from 'prop-types';
+import TableHeader from './tableHeader';
+import TableBody from './tableBody';
+import Bookmark from './bookmark';
+import Qualities from './qualities';
+import Table from './table';
 
 const UsersTable = ({
   userCrop,
   onSort,
   onDelete,
   onBookmark,
-  currentSort
+  selectedSort
 }) => {
-  const handleSort = (item) => {
-    if (item === currentSort.iter) {
-      onSort({
-        ...currentSort,
-        order: currentSort.order === 'asc' ? 'desc' : 'asc'
-      });
-    } else {
-      onSort({ iter: item, order: 'asc' });
+  const columns = {
+    name: {
+      path: 'name',
+      name: 'Имя'
+    },
+    qualities: {
+      path: 'qualities',
+      name: 'Качества',
+      component: (user) => (
+        <Qualities qualities={user.qualities} />
+      )
+    },
+    professions: {
+      path: 'profession.name',
+      name: 'Профессия'
+    },
+    completedMeetings: {
+      path: 'completedMeetings',
+      name: 'Встретился, раз'
+    },
+    rate: {
+      path: 'rate',
+      name: 'Оценка'
+    },
+    bookmark: {
+      path: 'bookmark',
+      name: 'Избранное',
+      component: (user) => (
+        <Bookmark
+          id={user._id}
+          bookmark={user.bookmark}
+          onBookmark={onBookmark}
+        />
+      )
+    },
+    delete: {
+      component: (user) => (
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => onDelete(user._id)}
+        >
+          Delete
+        </button>
+      )
     }
   };
 
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th
-            onClick={() => handleSort('name')}
-            scope="col"
-            className="w-25 p-3"
-            role="button"
-          >
-            Имя
-          </th>
-          <th scope="col" className="w-25 p-3" >
-            Качества
-          </th>
-          <th
-            onClick={() => handleSort('profession.name')}
-            scope="col"
-            role="button"
-            className="p-3"
-          >
-            Профессия
-          </th>
-          <th
-            onClick={() => handleSort('completedMeetings')}
-            scope="col"
-            role="button"
-            className="p-3"
-          >
-            Встретился, раз
-          </th>
-          <th
-            onClick={() => handleSort('rate')}
-            scope="col"
-            role="button"
-            className="p-3"
-          >
-            Оценка
-          </th>
-          <th
-            onClick={() => handleSort('bookmark')}
-            scope="col"
-            role="button"
-            className="p-3"
-          >
-            Избранное
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        {userCrop.map((user) => (
-          <User
-            key={user._id}
-            onDelete={onDelete}
-            onBookmark={onBookmark}
-            {...user}
-          />
-        ))}
-      </tbody>
-    </table>
+    <Table >
+      <TableHeader
+        columns={columns}
+        selectedSort={selectedSort}
+        onSort={onSort}
+      />
+      <TableBody {...{ columns, data: userCrop }} />
+      </Table>
   );
 };
+
 UsersTable.propTypes = {
   userCrop: PropTypes.array.isRequired,
-  currentSort: PropTypes.object.isRequired,
+  selectedSort: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
   onBookmark: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired

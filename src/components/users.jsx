@@ -14,7 +14,7 @@ const Users = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
-  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' });
+  const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => {
@@ -38,7 +38,7 @@ const Users = (props) => {
     ? users.filter((user) => user.profession._id === selectedProf._id)
     : users;
   const count = filteredUsers.length;
-  const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
   const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
   const clearFilter = () => {
@@ -68,7 +68,7 @@ const Users = (props) => {
           <SearchStatus usersNum={count} />
           <UsersTable
             userCrop={userCrop}
-            currentSort={sortBy}
+            selectedSort={sortBy}
             onDelete={onDelete}
             onBookmark={onBookmark}
             onSort={handleSort}
