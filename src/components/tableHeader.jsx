@@ -16,9 +16,9 @@ const TableHeader = ({ onSort, columns, selectedSort }) => {
   const renderOrderIcon = (item) => {
     if (item === selectedSort.path) {
       if (selectedSort.order === 'asc') {
-        return <i className="bi bi-caret-up-fill"></i>;
-      } else if (selectedSort.order === 'desc') {
         return <i className="bi bi-caret-down-fill"></i>;
+      } else if (selectedSort.order === 'desc') {
+        return <i className="bi bi-caret-up-fill"></i>;
       }
     }
   };

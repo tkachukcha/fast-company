@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Table from './table';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import Bookmark from './bookmark';
 import Qualities from './qualities';
-import Table from './table';
 
 const UsersTable = ({
   userCrop,
@@ -21,9 +21,7 @@ const UsersTable = ({
     qualities: {
       path: 'qualities',
       name: 'Качества',
-      component: (user) => (
-        <Qualities qualities={user.qualities} />
-      )
+      component: (user) => <Qualities qualities={user.qualities} />
     },
     professions: {
       path: 'profession.name',
@@ -61,14 +59,14 @@ const UsersTable = ({
   };
 
   return (
-    <Table >
+    <Table>
       <TableHeader
         columns={columns}
         selectedSort={selectedSort}
         onSort={onSort}
       />
       <TableBody {...{ columns, data: userCrop }} />
-      </Table>
+    </Table>
   );
 };
 
