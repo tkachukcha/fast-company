@@ -4,15 +4,21 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import api from '../api';
 import Qualities from './qualities';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const UserPage = ({ id }) => {
+  const history = useHistory();
+
   const [user, setUser] = useState();
   useEffect(() => {
     api.users.getById(id).then((data) => {
       setUser(data);
     });
   }, []);
+
+  const handleGoBack = () => {
+    history.push('/users');
+  };
 
   return (
     <>
@@ -27,10 +33,8 @@ const UserPage = ({ id }) => {
             Встретился, раз: {user.completedMeetings}
           </h3>
           <h3 className="px-3 py-1">Оценка: {user.rate}</h3>
-          <button className="m-3 px-3 py-1">
-            <Link className="text-decoration-none link-dark" to="/users">
-              Все пользователи
-            </Link>
+          <button className="m-3 px-3 py-1" onClick={handleGoBack}>
+            Все пользователи
           </button>
         </>
       ) : (
