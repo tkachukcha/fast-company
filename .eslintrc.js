@@ -25,6 +25,6 @@ module.exports = {
       'error',
       { anonymous: 'always', named: 'never' }
     ],
-    'multiline-ternary': ['error', 'ignore']
+    'multiline-ternary': ['error', 'never']
   }
 };

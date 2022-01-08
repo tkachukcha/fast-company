@@ -1,4 +1,8 @@
+/* eslint-disable multiline-ternary */
+
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 import Table from './table';
 import TableHeader from './tableHeader';
@@ -16,7 +20,8 @@ const UsersTable = ({
   const columns = {
     name: {
       path: 'name',
-      name: 'Имя'
+      name: 'Имя',
+      component: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link>
     },
     qualities: {
       path: 'qualities',
