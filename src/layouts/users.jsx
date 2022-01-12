@@ -9,15 +9,17 @@ import { paginate } from '../utils/paginate';
 import SearchStatus from '../components/searchStatus';
 import UsersTable from '../components/usersTable';
 import UserPage from '../components/userPage';
+import SearchForm from '../components/searchForm';
 import _ from 'lodash';
 
 const Users = () => {
-  const pageSize = 8;
+  const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [users, setUsers] = useState();
+  const [searchStr, setSearchStr] = useState('');
 
   useEffect(() => {
     api.users.fetchAll().then((data) => {
@@ -50,6 +52,7 @@ const Users = () => {
   };
 
   const handleProfessionSelect = (item) => {
+    setSearchStr('');
     setSelectedProf(item);
   };
 
@@ -57,16 +60,34 @@ const Users = () => {
     setSortBy(item);
   };
 
-  const filteredUsers =
-    users && selectedProf
-      ? users.filter((user) => user.profession._id === selectedProf._id)
-      : users;
+  let filteredUsers;
+  if (users) {
+    if (selectedProf) {
+      filteredUsers = users.filter(
+        (user) => user.profession._id === selectedProf._id
+      );
+    } else {
+      if (searchStr !== '') {
+        const searchRegExp = new RegExp(searchStr, 'i');
+        filteredUsers = users.filter((user) => searchRegExp.test(user.name));
+      } else {
+        filteredUsers = users;
+      }
+    }
+  }
+
   const count = filteredUsers ? filteredUsers.length : undefined;
   const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
   const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
   const clearFilter = () => {
     setSelectedProf();
+    setSearchStr('');
+  };
+
+  const handleSearch = ({ target }) => {
+    setSelectedProf();
+    setSearchStr(target.value);
   };
 
   useEffect(() => {
@@ -96,8 +117,12 @@ const Users = () => {
                 </button>
               </div>
             )}
-            <div className="d-flex flex-column flex-shrink-0 p-3">
+            <div
+              className="d-flex flex-column flex-shrink-0 p-3 w-75"
+              style={{ height: 600 }}
+            >
               <SearchStatus usersNum={count} />
+              <SearchForm onChange={handleSearch} searchStr={searchStr} />
               <UsersTable
                 userCrop={userCrop}
                 selectedSort={sortBy}

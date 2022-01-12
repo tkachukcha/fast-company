@@ -1,3 +1,5 @@
+/* eslint-disable multiline-ternary */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -30,6 +32,7 @@ const TableHeader = ({ onSort, columns, selectedSort }) => {
           <th
             scope="col"
             key={column}
+            className="w-25"
             onClick={
               columns[column].path !== 'qualities'
                 ? () => handleSort(columns[column].path)
