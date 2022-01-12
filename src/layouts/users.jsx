@@ -148,46 +148,6 @@ const Users = () => {
   };
 
   return renderUsers();
-  // (
-  //   <>
-  //     {users ? (
-  //       <div className="d-flex">
-  //         {professions && (
-  //           <div className="d-flex flex-column flex-shrink-0 p-3">
-  //             <GroupList
-  //               items={professions}
-  //               onItemSelect={handleProfessionSelect}
-  //               selectedItem={selectedProf}
-  //             />
-  //             <button className="btn btn-secondary m-2" onClick={clearFilter}>
-  //               Очистить
-  //             </button>
-  //           </div>
-  //         )}
-  //         <div className="d-flex flex-column flex-shrink-0 p-3">
-  //           <SearchStatus usersNum={count} />
-  //           <UsersTable
-  //             userCrop={userCrop}
-  //             selectedSort={sortBy}
-  //             onDelete={handleUserDelete}
-  //             onBookmark={handleUserBookmarked}
-  //             onSort={handleSort}
-  //           />
-  //           <div className="d-flex justify-content-center">
-  //             <Pagination
-  //               itemsCount={count}
-  //               pageSize={pageSize}
-  //               currentPage={currentPage}
-  //               onPageChange={handlePageChange}
-  //             />
-  //           </div>
-  //         </div>
-  //       </div>
-  //     ) : (
-  //       <h1 className="p-3">Загрузка...</h1>
-  //     )}
-  //   </>
-  // );
 };
 
 export default Users;
