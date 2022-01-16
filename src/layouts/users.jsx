@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api';
-import Pagination from '../components/pagination';
-import GroupList from '../components/groupList';
+import Pagination from '../components/common/pagination';
+import GroupList from '../components/common/groupList';
 import { paginate } from '../utils/paginate';
-import SearchStatus from '../components/searchStatus';
-import UsersTable from '../components/usersTable';
-import UserPage from '../components/userPage';
-import SearchForm from '../components/searchForm';
+import SearchStatus from '../components/ui/searchStatus';
+import UsersTable from '../components/ui/usersTable';
+import UserPage from '../components/page/userPage';
+import SearchForm from '../components/common/form/searchForm';
 import _ from 'lodash';
 
 const Users = () => {
