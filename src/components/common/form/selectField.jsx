@@ -16,25 +16,27 @@ const SelectField = ({
           _id: options[optionName]._id
         }))
       : options;
-
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
   return (
     <div className="mb-4">
-      <label htmlFor="validationCustom04" className="form-label">
+      <label htmlFor={name} className="form-label">
         {label}
       </label>
       <select
         className={error ? 'form-select is-invalid' : 'form-select'}
-        id="validationCustom04"
+        id={name}
         name={name}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
       >
         <option disabled value="">
           {defaultOption}
         </option>
         {optionsArray &&
           optionsArray.map((option) => (
-            <option key={option._id} value={option.value}>
+            <option key={option._id} value={option._id}>
               {option.name}
             </option>
           ))}
@@ -43,9 +45,7 @@ const SelectField = ({
     </div>
   );
 };
-SelectField.defaultProps = {
-  type: 'text'
-};
+
 SelectField.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,

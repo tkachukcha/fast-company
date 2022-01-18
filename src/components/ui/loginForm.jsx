@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '../common/form/textField';
+import CheckBoxField from '../common/form/checkBoxField';
 import { validator } from '../../utils/validator';
 
 const LoginForm = () => {
-  const [data, setData] = useState({ email: '', password: '' });
+  const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const validatorConfig = {
@@ -59,6 +60,9 @@ const LoginForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
+      <CheckBoxField value={data.stayOn} name="stayOn" onChange={handleChange}>
+        Остаться в системе
+      </CheckBoxField>
       <button
         type="submit"
         disabled={!isValid}
