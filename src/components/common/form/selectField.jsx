@@ -12,7 +12,7 @@ const SelectField = ({
   const optionsArray =
     !Array.isArray(options) && typeof options === 'object'
       ? Object.keys(options).map((optionName) => ({
-          name: optionName,
+          name: options[optionName].name,
           _id: options[optionName]._id
         }))
       : options;
@@ -53,7 +53,7 @@ SelectField.propTypes = {
   defaultOption: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   error: PropTypes.string,
-  options: PropTypes.array
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default SelectField;

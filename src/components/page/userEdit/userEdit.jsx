@@ -1,50 +1,122 @@
-/* eslint-disable multiline-ternary */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import MultiSelectField from '../../common/form/multiSelectField';
+import TextField from '../../common/form/textField';
+import SelectField from '../../common/form/selectField';
+import RadioField from '../../common/form/radioField';
 import api from '../../../api';
-import Qualities from '../../ui/qualities';
-import { useHistory } from 'react-router-dom';
+// import { validator } from '../../utils/validator';
 
-const UserPage = ({ id }) => {
-  const history = useHistory();
+const UserEdit = ({ user, qualities, professions }) => {
+  const [errors, setErrors] = useState({});
+  const [newData, setNewData] = useState(user);
 
-  const [user, setUser] = useState();
-  useEffect(() => {
-    api.users.getById(id).then((data) => {
-      setUser(data);
-    });
-  }, []);
+  const qualArr =
+    qualities && Object.keys(qualities).map((qual) => qualities[qual]);
 
-  const handleGoBack = () => {
-    history.push('/users');
+  const handleChange = (target) => {
+    console.log(target);
+    if (target.name === 'profession') {
+      const profArr = Object.keys(professions).map((prof) => ({
+        name: professions[prof].name,
+        _id: professions[prof]._id
+      }));
+      setNewData((prevState) => ({
+        ...prevState,
+        [target.name]: profArr.find((prof) => prof._id === target.value)
+      }));
+    } else if (target.name === 'qualities') {
+      const newQualities = target.value.map((quality) =>
+        qualArr.find((qual) => qual._id === quality.value)
+      );
+      setNewData((prevState) => ({
+        ...prevState,
+        [target.name]: newQualities
+      }));
+    } else {
+      setNewData((prevState) => ({
+        ...prevState,
+        [target.name]: target.value
+      }));
+    }
+  };
+
+  const userQualities = Object.keys(newData.qualities).map((qual) => ({
+    label: newData.qualities[qual].name,
+    value: newData.qualities[qual]._id
+  }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.users.update(user._id, newData);
+    console.log(newData);
   };
 
   return (
-    <>
-      {user ? (
-        <>
-          <h1 className="p-3">{user.name}</h1>
-          <h2 className="px-3 py-1">Профессия: {user.profession.name}</h2>
-          <div className="px-3 py-2">
-            <Qualities qualities={user.qualities} />
-          </div>
-          <h3 className="px-3 py-1">
-            Встретился, раз: {user.completedMeetings}
-          </h3>
-          <h3 className="px-3 py-1">Оценка: {user.rate}</h3>
-          <button className="m-3 px-3 py-1" onClick={handleGoBack}>
-            Все пользователи
-          </button>
-        </>
-      ) : (
-        <h1 className="p-3">Загрузка...</h1>
-      )}
-    </>
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 shadow p-4">
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Имя"
+              name="name"
+              defaultValue={newData.name}
+              value={newData.name}
+              onChange={handleChange}
+              error={errors.name}
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={newData.email}
+              onChange={handleChange}
+              error={errors.email}
+            />
+            <SelectField
+              label="Профессия"
+              name="profession"
+              value={newData.profession._id}
+              onChange={handleChange}
+              options={professions}
+              defaultOption="Выберите..."
+              error={errors.professions}
+            />
+            <RadioField
+              name="sex"
+              value={newData.sex}
+              onChange={handleChange}
+              options={[
+                { name: 'Мужчина', value: 'male' },
+                { name: 'Женщина', value: 'female' },
+                { name: 'Другой', value: 'other' }
+              ]}
+            />
+            <MultiSelectField
+              label="Выберите качества"
+              options={qualities}
+              onChange={handleChange}
+              name="qualities"
+              defaultValue={userQualities}
+            />
+            <button
+              type="submit"
+              // disabled={!isValid}
+              className="btn btn-primary w-100 mx-auto"
+            >
+              Обновить
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
-UserPage.propTypes = {
-  id: PropTypes.string
+UserEdit.propTypes = {
+  user: PropTypes.object,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+  qualities: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  professions: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
-export default UserPage;
+export default UserEdit;

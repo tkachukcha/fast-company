@@ -9,6 +9,7 @@ import { paginate } from '../utils/paginate';
 import SearchStatus from '../components/ui/searchStatus';
 import UsersTable from '../components/ui/usersTable';
 import UserPage from '../components/page/userPage';
+import UserEdit from '../components/page/userEdit';
 import SearchForm from '../components/common/form/searchForm';
 import _ from 'lodash';
 
