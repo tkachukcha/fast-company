@@ -1,1 +1,2 @@
-# Fast Company App
+# Fast Company
+## React learning project
