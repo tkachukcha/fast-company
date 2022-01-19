@@ -23,10 +23,16 @@ const UserPage = ({ id }) => {
     });
   }, []);
 
+  useEffect(() => {
+    api.users.getById(id).then((data) => {
+      setUser(data);
+    });
+  }, [user]);
+
   const params = useParams();
   const edit = params.edit;
 
-  const handleGoBack = () => {
+  const handleEdit = () => {
     history.push(`/users/${id}/edit`);
   };
 
@@ -39,6 +45,7 @@ const UserPage = ({ id }) => {
       return (
         <>
           <h1 className="p-3">{user.name}</h1>
+          <h2 className="px-3 py-1">{user.sex}</h2>
           <h2 className="px-3 py-1">Профессия: {user.profession.name}</h2>
           <div className="px-3 py-2">
             <Qualities qualities={user.qualities} />
@@ -47,7 +54,7 @@ const UserPage = ({ id }) => {
             Встретился, раз: {user.completedMeetings}
           </h3>
           <h3 className="px-3 py-1">Оценка: {user.rate}</h3>
-          <button className="m-3 px-3 py-1" onClick={handleGoBack}>
+          <button className="m-3 px-3 py-1" onClick={handleEdit}>
             Редактировать
           </button>
         </>

@@ -33,8 +33,8 @@ const RegisterForm = () => {
   };
   const validatorConfig = {
     email: {
-      isRequired: { message: 'Email is required' },
-      isEmail: { message: 'Email is not valid' }
+      isRequired: { message: 'Введите электронную почту' },
+      isEmail: { message: 'Адрес электронной почты некорректен' }
     },
     password: {
       isRequired: { message: 'Password is required' },
@@ -52,6 +52,9 @@ const RegisterForm = () => {
       isRequired: {
         message: 'Вы должны согласиться с лицензионным соглашением'
       }
+    },
+    qualities: {
+      isRequired: { message: 'Выберите хотя бы одно качество' }
     }
   };
   useEffect(() => {
@@ -114,6 +117,7 @@ const RegisterForm = () => {
         onChange={handleChange}
         name="qualities"
         defaultValue={data.qualities}
+        error={errors.qualities}
       />
       <CheckBoxField
         value={data.license}
