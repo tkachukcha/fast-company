@@ -38,7 +38,6 @@ const LoginForm = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
   };
 
   const isValid = Object.keys(errors).length === 0;

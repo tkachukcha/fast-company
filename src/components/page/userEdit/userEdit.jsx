@@ -23,7 +23,6 @@ const UserEdit = ({ user, qualities, professions, onSubmit }) => {
   }));
 
   const handleChange = (target) => {
-    console.log(target);
     if (target.name === 'profession') {
       const profArr = Object.keys(professions).map((prof) => ({
         name: professions[prof].name,

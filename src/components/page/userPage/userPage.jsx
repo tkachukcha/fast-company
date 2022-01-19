@@ -36,6 +36,10 @@ const UserPage = ({ id }) => {
     history.push(`/users/${id}/edit`);
   };
 
+  const handleGoBack = () => {
+    history.push('/users/');
+  };
+
   const renderUserPage = (user, edit) => {
     if (edit) {
       return (
@@ -57,6 +61,13 @@ const UserPage = ({ id }) => {
           <button className="m-3 px-3 py-1" onClick={handleEdit}>
             Редактировать
           </button>
+          <a
+            type="button"
+            className="d-block text-primary px-3"
+            onClick={handleGoBack}
+          >
+            Назад
+          </a>
         </>
       );
     }

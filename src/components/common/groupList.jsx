@@ -10,7 +10,6 @@ const GroupList = ({
 }) => {
   const renderListItem = (items) => {
     if (typeof items === 'object' && !Array.isArray(items) && items !== null) {
-      console.log(selectedItem);
       const newItems = Object.keys(items).map((item) => (
         <li
           key={items[item][valueProperty]}

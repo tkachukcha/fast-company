@@ -3,6 +3,9 @@ import TextField from './textField';
 import PropTypes from 'prop-types';
 
 const SearchForm = ({ searchStr, onChange }) => {
+  const handleChange = (target) => {
+    onChange(target.value);
+  };
   return (
     <form>
       <TextField
@@ -10,7 +13,7 @@ const SearchForm = ({ searchStr, onChange }) => {
         type="text"
         name="search"
         value={searchStr}
-        onChange={onChange}
+        onChange={handleChange}
       />
     </form>
   );

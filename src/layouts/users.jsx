@@ -86,9 +86,9 @@ const Users = () => {
     setSearchStr('');
   };
 
-  const handleSearch = ({ target }) => {
+  const handleSearch = (value) => {
     setSelectedProf();
-    setSearchStr(target.value);
+    setSearchStr(value);
   };
 
   useEffect(() => {
