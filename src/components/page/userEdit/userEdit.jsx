@@ -8,7 +8,7 @@ import RadioField from '../../common/form/radioField';
 import api from '../../../api';
 import { validator } from '../../../utils/validator';
 
-const UserEdit = ({ user, qualities, professions, onSubmit }) => {
+const UserEdit = ({ user, qualities, professions }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [newData, setNewData] = useState(user);
