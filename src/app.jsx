@@ -4,7 +4,6 @@ import NavBar from './components/ui/navBar';
 import { Route, Switch } from 'react-router-dom';
 import Main from './layouts/main';
 import Login from './layouts/login';
-import UserEdit from './components/page/userEdit';
 
 const App = () => {
   return (

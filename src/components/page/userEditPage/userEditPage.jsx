@@ -8,14 +8,13 @@ import RadioField from '../../common/form/radioField';
 import api from '../../../api';
 import { validator } from '../../../utils/validator';
 
-const UserEdit = ({ user, qualities, professions }) => {
+const UserEditPage = ({ user, qualities, professions, onUpdate }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const [newData, setNewData] = useState(user);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [newData, setNewData] = useState(user);
 
-  const qualArr =
-    qualities && Object.keys(qualities).map((qual) => qualities[qual]);
+  const qualArr = Object.keys(qualities).map((qual) => qualities[qual]);
 
   const userQualities = Object.keys(newData.qualities).map((qual) => ({
     label: newData.qualities[qual].name,
@@ -85,6 +84,7 @@ const UserEdit = ({ user, qualities, professions }) => {
     setTimeout(() => {
       history.push(`/users/${user._id}`);
     }, 1000);
+    onUpdate();
   };
 
   const handleGoBack = () => {
@@ -171,12 +171,13 @@ const UserEdit = ({ user, qualities, professions }) => {
     </div>
   );
 };
-UserEdit.propTypes = {
+UserEditPage.propTypes = {
   user: PropTypes.object,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
+  onUpdate: PropTypes.func,
   qualities: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   professions: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
-export default UserEdit;
+export default UserEditPage;

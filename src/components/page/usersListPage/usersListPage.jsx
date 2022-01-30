@@ -9,12 +9,19 @@ import SearchForm from '../../../components/common/form/searchForm';
 import _ from 'lodash';
 import api from '../../../api';
 
-const UsersListPage = ({ users, professions, onBookmark, onDelete }) => {
+const UsersListPage = ({ professions, onBookmark, onDelete }) => {
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchStr, setSearchStr] = useState('');
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => {
+      setUsers(data);
+    });
+  });
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -63,7 +70,21 @@ const UsersListPage = ({ users, professions, onBookmark, onDelete }) => {
     setCurrentPage(1);
   }, [selectedProf]);
 
-  return (
+  const handleUserDelete = (id) => {
+    setUsers((prevState) => prevState.filter((user) => id !== user._id));
+  };
+
+  const handleUserBookmarked = (id) => {
+    const newUsers = users.map((user) => {
+      if (user._id === id) {
+        user.bookmark = !user.bookmark;
+      }
+      return { ...user };
+    });
+    setUsers(newUsers);
+  };
+
+  return users ? (
     <div className="d-flex">
       {professions && (
         <div className="d-flex flex-column flex-shrink-0 p-3">
@@ -86,8 +107,8 @@ const UsersListPage = ({ users, professions, onBookmark, onDelete }) => {
         <UsersTable
           userCrop={userCrop}
           selectedSort={sortBy}
-          onDelete={onDelete}
-          onBookmark={onBookmark}
+          onDelete={handleUserDelete}
+          onBookmark={handleUserBookmarked}
           onSort={handleSort}
         />
         <div className="d-flex justify-content-center">
@@ -100,10 +121,12 @@ const UsersListPage = ({ users, professions, onBookmark, onDelete }) => {
         </div>
       </div>
     </div>
+  ) : (
+    <h1 className="p-3">Загрузка...</h1>
   );
 };
 UsersListPage.propTypes = {
-  users: PropTypes.object,
+  usersData: PropTypes.array,
   professions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   onBookmark: PropTypes.func,
   onDelete: PropTypes.func
