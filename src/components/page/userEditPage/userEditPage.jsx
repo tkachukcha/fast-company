@@ -93,8 +93,13 @@ const UserEditPage = ({ user, qualities, professions, onUpdate }) => {
 
   return (
     <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-6 offset-md-3 shadow p-4">
+      <div className="row gutters-sm">
+        <div className="col-md-4 mb-3">
+          <button className="btn btn-primary fw-bold" onClick={handleGoBack}>
+            <i className="bi bi-box-arrow-left"></i> Back
+          </button>
+        </div>
+        <div className="col-md-8 offset-md-3 shadow p-4">
           <form onSubmit={handleSubmit}>
             <>
               {isUpdated ? (
@@ -155,13 +160,6 @@ const UserEditPage = ({ user, qualities, professions, onUpdate }) => {
                   >
                     Обновить
                   </button>
-                  <a
-                    type="button"
-                    className="d-block text-center text-primary mx-auto mt-2"
-                    onClick={handleGoBack}
-                  >
-                    Назад
-                  </a>
                 </>
               )}
             </>

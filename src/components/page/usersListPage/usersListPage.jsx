@@ -21,7 +21,7 @@ const UsersListPage = ({ professions, onBookmark, onDelete }) => {
     api.users.fetchAll().then((data) => {
       setUsers(data);
     });
-  });
+  }, []);
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
