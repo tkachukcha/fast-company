@@ -11,7 +11,7 @@ const Comments = ({ users, id }) => {
 
   useEffect(() => {
     api.comments.fetchCommentsForUser(id).then((data) => {
-      setComments(data);
+      setComments(data.reverse());
     });
   }, [commentsUpdated]);
 
@@ -21,7 +21,7 @@ const Comments = ({ users, id }) => {
 
   useEffect(() => {
     api.comments.fetchCommentsForUser(id).then((data) => {
-      setComments(data);
+      setComments(data.reverse());
     });
   }, []);
   return (

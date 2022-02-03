@@ -16,7 +16,8 @@ const Comment = ({ id, content, userId, createdAt, users, onDelete }) => {
     const createTime = new Date(createdAt);
     const elapsed = now.getTime() - createTime.getTime();
     let createdMinutes = createTime.getMinutes();
-    createdMinutes = createdMinutes < 10 && `0${createdMinutes}`;
+    createdMinutes =
+      createdMinutes < 10 ? `0${createdMinutes}` : createdMinutes;
     let message;
     const months = [
       'Января',

@@ -6,7 +6,8 @@ import { validator } from '../../utils/validator';
 import api from '../../api';
 
 const AddComment = ({ users, pageId, onSubmit }) => {
-  const [data, setData] = useState({ pageId: pageId, userId: '', content: '' });
+  const initialValue = { pageId: pageId, userId: '', content: '' };
+  const [data, setData] = useState(initialValue);
   const [errors, setErrors] = useState({});
 
   const handleChange = (target) => {
@@ -33,7 +34,7 @@ const AddComment = ({ users, pageId, onSubmit }) => {
     const isValid = validate();
     if (!isValid) return;
     api.comments.add(data).then((data) => {
-      setData({ pageId: pageId, userId: '', content: '' });
+      setData(initialValue);
     });
     onSubmit();
   };
