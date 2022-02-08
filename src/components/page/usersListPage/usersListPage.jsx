@@ -7,21 +7,17 @@ import SearchStatus from '../../../components/ui/searchStatus';
 import UsersTable from '../../../components/ui/usersTable';
 import SearchForm from '../../../components/common/form/searchForm';
 import _ from 'lodash';
-import api from '../../../api';
+import { useUsers } from '../../../hooks/useUsers';
+import { useProfessions } from '../../../hooks/useProfessions';
 
-const UsersListPage = ({ professions, onBookmark, onDelete }) => {
+const UsersListPage = ({ onBookmark, onDelete }) => {
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchStr, setSearchStr] = useState('');
-  const [users, setUsers] = useState();
-
-  useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data);
-    });
-  }, []);
+  const { professions } = useProfessions();
+  const { users } = useUsers();
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -40,7 +36,7 @@ const UsersListPage = ({ professions, onBookmark, onDelete }) => {
   if (users) {
     if (selectedProf) {
       filteredUsers = users.filter(
-        (user) => user.profession._id === selectedProf._id
+        (user) => user.profession === selectedProf._id
       );
     } else {
       if (searchStr !== '') {
@@ -71,7 +67,8 @@ const UsersListPage = ({ professions, onBookmark, onDelete }) => {
   }, [selectedProf]);
 
   const handleUserDelete = (id) => {
-    setUsers((prevState) => prevState.filter((user) => id !== user._id));
+    // setUsers((prevState) => prevState.filter((user) => id !== user._id));
+    console.log(id);
   };
 
   const handleUserBookmarked = (id) => {
@@ -81,23 +78,23 @@ const UsersListPage = ({ professions, onBookmark, onDelete }) => {
       }
       return { ...user };
     });
-    setUsers(newUsers);
+    // setUsers(newUsers);
+    console.log(newUsers);
   };
 
-  return users ? (
+  return (
     <div className="d-flex">
-      {professions && (
-        <div className="d-flex flex-column flex-shrink-0 p-3">
-          <GroupList
-            items={professions}
-            onItemSelect={handleProfessionSelect}
-            selectedItem={selectedProf}
-          />
-          <button className="btn btn-secondary m-2" onClick={clearFilter}>
-            Очистить
-          </button>
-        </div>
-      )}
+      <div className="d-flex flex-column flex-shrink-0 p-3">
+        <GroupList
+          items={professions}
+          onItemSelect={handleProfessionSelect}
+          selectedItem={selectedProf}
+        />
+        <button className="btn btn-secondary m-2" onClick={clearFilter}>
+          Очистить
+        </button>
+      </div>
+
       <div
         className="d-flex flex-column flex-shrink-0 p-3 w-75"
         style={{ height: 600 }}
@@ -121,8 +118,6 @@ const UsersListPage = ({ professions, onBookmark, onDelete }) => {
         </div>
       </div>
     </div>
-  ) : (
-    <h1 className="p-3">Загрузка...</h1>
   );
 };
 UsersListPage.propTypes = {

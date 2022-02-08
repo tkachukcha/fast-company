@@ -15,7 +15,7 @@ const Bookmark = (props) => {
 };
 Bookmark.propTypes = {
   id: PropTypes.string.isRequired,
-  bookmark: PropTypes.bool.isRequired,
+  bookmark: PropTypes.bool,
   onBookmark: PropTypes.func.isRequired
 };
 

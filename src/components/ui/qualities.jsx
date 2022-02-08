@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useQualities } from '../../hooks/useQualities';
 
-const Qualities = (props) => {
-  const { qualities } = props;
+const Qualities = ({ qualities }) => {
+  const { qualitiesList } = useQualities();
   const badgeClass = 'badge m-1 bg-';
-  return qualities.map((quality, id) => (
-    <span key={id} className={badgeClass + quality.color}>
+  const newQualities = qualities.map((id) =>
+    qualitiesList.find((q) => q._id === id)
+  );
+  return newQualities.map((quality) => (
+    <span key={quality._id} className={badgeClass + quality.color}>
       {quality.name}
     </span>
   ));
