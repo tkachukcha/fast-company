@@ -6,6 +6,13 @@ const usersService = {
   fetchAll: async () => {
     const { data } = await httpService.get(usersEndPoint);
     return data;
+  },
+  create: async (payload) => {
+    const { data } = await httpService.put(
+      usersEndPoint + payload._id,
+      payload
+    );
+    return data;
   }
 };
 

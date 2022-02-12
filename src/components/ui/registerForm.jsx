@@ -5,29 +5,26 @@ import SelectField from '../common/form/selectField';
 import RadioField from '../common/form/radioField';
 import CheckBoxField from '../common/form/checkBoxField';
 import { validator } from '../../utils/validator';
-import api from '../../api';
+import { useQualities } from '../../hooks/useQualities';
+import { useProfessions } from '../../hooks/useProfessions';
+import { useAuth } from '../../hooks/useAuth';
+import { useHistory } from 'react-router-dom';
 
 const RegisterForm = () => {
+  const history = useHistory();
   const [data, setData] = useState({
     email: '',
     password: '',
-    professions: '',
+    profession: '',
     sex: 'male',
     qualities: [],
     license: false
   });
   const [errors, setErrors] = useState({});
-  const [professions, setProfession] = useState();
-  const [qualities, setQualities] = useState({});
-
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => {
-      setProfession(data);
-    });
-    api.qualities.fetchAll().then((data) => {
-      setQualities(data);
-    });
-  }, []);
+  const { professions } = useProfessions();
+  const { qualitiesList } = useQualities();
+  const qualities = qualitiesList.map((q) => ({ label: q.name, value: q._id }));
+  const { signUp } = useAuth();
   const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
@@ -67,10 +64,18 @@ const RegisterForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
+    const newData = { ...data, qualities: data.qualities.map((q) => q.value) };
+
+    try {
+      await signUp(newData);
+      history.push('/');
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   const isValid = Object.keys(errors).length === 0;
@@ -93,12 +98,12 @@ const RegisterForm = () => {
       />
       <SelectField
         label="Профессия"
-        name="professions"
-        value={data.professions}
+        name="profession"
+        value={data.profession}
         onChange={handleChange}
         options={professions}
         defaultOption="Выберите..."
-        error={errors.professions}
+        error={errors.profession}
       />
       <RadioField
         name="sex"
