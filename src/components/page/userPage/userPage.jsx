@@ -7,29 +7,21 @@ import UserCard from '../../ui/userCard';
 import Comments from '../../ui/comments';
 import QualitiesCard from '../../ui/qualitiesCard';
 import MeetingsCard from '../../ui/meetingsCard';
+import { useUsers } from '../../../hooks/useUsers';
+import { CommentsProvider } from '../../../hooks/useComments';
 
 const UserPage = ({ id, professions, qualities }) => {
   const history = useHistory();
-  const [user, setUser] = useState();
-  const [users, setUsers] = useState();
+  const { users, getUserById } = useUsers();
   const [isUpdated, setUpdated] = useState(false);
-
+  const user = getUserById(id);
   const edit = useParams().edit;
 
-  useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data);
-    });
-    api.users.getById(id).then((data) => {
-      setUser(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.users.getById(id).then((data) => {
-      setUser(data);
-    });
-  }, [isUpdated]);
+  // useEffect(() => {
+  //   api.users.getById(id).then((data) => {
+  //     setUser(data);
+  //   });
+  // }, [isUpdated]);
 
   const handleUpdate = () => {
     setUpdated((prevState) => !prevState);
@@ -59,7 +51,9 @@ const UserPage = ({ id, professions, qualities }) => {
               </div>
 
               <div className="col-md-8">
-                <Comments users={users} id={id} />
+                <CommentsProvider>
+                  <Comments users={users} id={id} />
+                </CommentsProvider>
               </div>
             </div>
           </div>

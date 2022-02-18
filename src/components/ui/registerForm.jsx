@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 const RegisterForm = () => {
   const history = useHistory();
   const [data, setData] = useState({
+    name: '',
     email: '',
     password: '',
     profession: '',
@@ -29,6 +30,10 @@ const RegisterForm = () => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const validatorConfig = {
+    name: {
+      isRequired: { message: 'Введите ваше имя' },
+      min: { message: `Имя должно быть длиннее 3 символов`, value: 3 }
+    },
     email: {
       isRequired: { message: 'Введите электронную почту' },
       isEmail: { message: 'Адрес электронной почты некорректен' }
@@ -81,6 +86,13 @@ const RegisterForm = () => {
   const isValid = Object.keys(errors).length === 0;
   return (
     <form onSubmit={handleSubmit}>
+      <TextField
+        label="Имя"
+        name="name"
+        value={data.name}
+        onChange={handleChange}
+        error={errors.name}
+      />
       <TextField
         label="Email"
         name="email"

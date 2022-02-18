@@ -9,6 +9,7 @@ import SearchForm from '../../../components/common/form/searchForm';
 import _ from 'lodash';
 import { useUsers } from '../../../hooks/useUsers';
 import { useProfessions } from '../../../hooks/useProfessions';
+import { useAuth } from '../../../hooks/useAuth';
 
 const UsersListPage = ({ onBookmark, onDelete }) => {
   const pageSize = 4;
@@ -18,6 +19,7 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
   const [searchStr, setSearchStr] = useState('');
   const { professions } = useProfessions();
   const { users } = useUsers();
+  const { currentUser } = useAuth();
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -32,22 +34,25 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
     setSortBy(item);
   };
 
-  let filteredUsers;
-  if (users) {
-    if (selectedProf) {
-      filteredUsers = users.filter(
-        (user) => user.profession === selectedProf._id
-      );
-    } else {
-      if (searchStr !== '') {
-        const searchRegExp = new RegExp(searchStr, 'i');
-        filteredUsers = users.filter((user) => searchRegExp.test(user.name));
+  function filterUsers(data) {
+    let filteredUsers;
+    if (data) {
+      if (selectedProf) {
+        filteredUsers = data.filter(
+          (user) => user.profession === selectedProf._id
+        );
       } else {
-        filteredUsers = users;
+        if (searchStr !== '') {
+          const searchRegExp = new RegExp(searchStr, 'i');
+          filteredUsers = data.filter((user) => searchRegExp.test(user.name));
+        } else {
+          filteredUsers = data;
+        }
       }
     }
+    return filteredUsers.filter((u) => u._id !== currentUser._id);
   }
-
+  const filteredUsers = filterUsers(users);
   const count = filteredUsers ? filteredUsers.length : undefined;
   const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
   const userCrop = paginate(sortedUsers, currentPage, pageSize);
@@ -65,11 +70,6 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
-
-  const handleUserDelete = (id) => {
-    // setUsers((prevState) => prevState.filter((user) => id !== user._id));
-    console.log(id);
-  };
 
   const handleUserBookmarked = (id) => {
     const newUsers = users.map((user) => {
@@ -104,7 +104,6 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
         <UsersTable
           userCrop={userCrop}
           selectedSort={sortBy}
-          onDelete={handleUserDelete}
           onBookmark={handleUserBookmarked}
           onSort={handleSort}
         />
