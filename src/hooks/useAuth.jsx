@@ -24,6 +24,7 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setUser] = useState();
   const [errors, setErrors] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [isUpdated, setUpdated] = useState(true);
   const history = useHistory();
   const errorCatcher = (error) => {
     const { message } = error.response.data.error;
@@ -33,7 +34,8 @@ const AuthProvider = ({ children }) => {
   async function getUserData() {
     try {
       const { content } = await usersService.getCurrentUser();
-      setUser({ ...content });
+      setUser(content);
+      console.log(content);
     } catch (error) {
       errorCatcher(error);
     } finally {
@@ -148,8 +150,12 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  async function updateCurrentUser() {}
+
   return (
-    <AuthContext.Provider value={{ signUp, signIn, currentUser, logOut }}>
+    <AuthContext.Provider
+      value={{ signUp, signIn, updateCurrentUser, currentUser, logOut }}
+    >
       {!isLoading ? children : <h1>Loading...</h1>}
     </AuthContext.Provider>
   );

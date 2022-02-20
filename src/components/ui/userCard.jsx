@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import Card from '../common/card';
 import Avatar from '../common/avatar';
 import { useAuth } from '../../hooks/useAuth';
+import { useHistory } from 'react-router-dom';
+import { useProfessions } from '../../hooks/useProfessions';
 
-const UserCard = ({ user, onEdit }) => {
+const UserCard = ({ user }) => {
   const { currentUser } = useAuth();
+  const { getProfession } = useProfessions();
+  const history = useHistory();
+  const handleEdit = () => {
+    history.push(`${history.location.pathname}/edit`);
+  };
   return (
     <Card>
       {currentUser._id === user._id && (
         <button
           className="position-absolute top-0 end-0 btn  btn-light btn-sm"
-          onClick={onEdit}
+          onClick={handleEdit}
         >
           <i className="bi bi-gear"></i>
         </button>
@@ -22,7 +29,7 @@ const UserCard = ({ user, onEdit }) => {
         <div className="mt-3">
           <h4>{user.name}</h4>
           <p className="text-secondary mb-1">
-            Профессия: {user.profession.name}
+            Профессия: {getProfession(user.profession).name}
           </p>
           <div className="text-muted">
             <i

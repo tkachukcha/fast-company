@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import SelectField from '../common/form/selectField';
 import TextArea from '../common/form/textArea';
 import { validator } from '../../utils/validator';
-import api from '../../api';
+import { useComments } from '../../hooks/useComments';
 
-const AddComment = ({ users, pageId, onSubmit }) => {
-  const initialValue = { pageId: pageId, userId: '', content: '' };
-  const [data, setData] = useState(initialValue);
+const AddComment = ({ onSubmit }) => {
+  const { createComment } = useComments();
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
 
   const handleChange = (target) => {
@@ -15,9 +14,6 @@ const AddComment = ({ users, pageId, onSubmit }) => {
   };
 
   const validatorConfig = {
-    userId: {
-      isRequired: { message: 'Choose a user' }
-    },
     content: {
       isRequired: { message: 'Message must not be empty' }
     }
@@ -33,27 +29,18 @@ const AddComment = ({ users, pageId, onSubmit }) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    api.comments.add(data).then((data) => {
-      setData(initialValue);
-    });
-    onSubmit();
+    onSubmit(data);
+    setData({});
+    setErrors({});
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>New comment</h2>
-      <SelectField
-        name="userId"
-        value={data.userId}
-        onChange={handleChange}
-        options={users}
-        defaultOption="Выберите..."
-        error={errors.userId}
-      />
       <TextArea
         name="content"
         label="Сообщение"
-        value={data.content}
+        value={data.content || ''}
         onChange={handleChange}
         error={errors.content}
       />
@@ -68,8 +55,6 @@ const AddComment = ({ users, pageId, onSubmit }) => {
   );
 };
 AddComment.propTypes = {
-  users: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  pageId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func
 };
 

@@ -1,49 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { orderBy } from 'lodash';
 import PropTypes from 'prop-types';
 import Card from '../common/card';
 import AddComment from './addComment';
 import Comment from '../common/comment';
-import api from '../../api';
+import { useComments } from '../../hooks/useComments';
 
-const Comments = ({ users, id }) => {
-  const [commentsUpdated, setCommentsUpdated] = useState(false);
-  const [comments, setComments] = useState();
+const Comments = () => {
+  const { comments, createComment, removeComment } = useComments();
 
-  useEffect(() => {
-    api.comments.fetchCommentsForUser(id).then((data) => {
-      setComments(data.reverse());
-    });
-  }, [commentsUpdated]);
-
-  const handleCommentsUpdate = () => {
-    setCommentsUpdated((prevState) => !prevState);
+  const handleDelete = (id) => {
+    removeComment(id);
   };
 
-  useEffect(() => {
-    api.comments.fetchCommentsForUser(id).then((data) => {
-      setComments(data.reverse());
-    });
-  }, []);
+  const handleSubmit = (data) => {
+    createComment(data);
+  };
+
+  const sortedComments = orderBy(comments, ['created_at'], ['desc']);
   return (
     <>
       <Card classes="mb-2">
-        <AddComment users={users} pageId={id} onSubmit={handleCommentsUpdate} />
+        <AddComment onSubmit={handleSubmit} />
       </Card>
-      {comments && comments.length !== 0 && (
+      {comments && (
         <Card>
           <h2>Comments</h2>
           <hr />
-          {comments.map((comment) => (
-            <Comment
-              key={comment._id}
-              id={comment._id}
-              content={comment.content}
-              userId={comment.userId}
-              createdAt={comment.created_at}
-              users={users}
-              onDelete={handleCommentsUpdate}
-            />
-          ))}
+          {sortedComments.length > 0 &&
+            sortedComments.map((comment) => (
+              <Comment
+                key={comment._id}
+                id={comment._id}
+                content={comment.content}
+                userId={comment.userId}
+                createdAt={comment.created_at}
+                onDelete={handleDelete}
+              />
+            ))}
         </Card>
       )}
     </>

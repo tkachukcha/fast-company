@@ -20,7 +20,7 @@ const App = () => {
         <ProfessionsProvider>
           <QualitiesProvider>
             <Switch>
-              <ProtectedRoute path="/users/:userID?/:edit?" component={Users} />
+              <ProtectedRoute path="/users/:userId?/:edit?" component={Users} />
               <Route path="/" exact component={Main} />
               <Route path="/login/:type?" component={Login} />
               <Route path="/logout" component={LogOut} />
