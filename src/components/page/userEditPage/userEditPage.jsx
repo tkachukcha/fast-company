@@ -14,8 +14,8 @@ import { useAuth } from '../../../hooks/useAuth';
 const UserEditPage = ({ id }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { getUserById, updateUser } = useUsers();
-  const { updateCurrentUser } = useAuth();
+  const { getUserById } = useUsers();
+  const { updateUser } = useAuth();
   const user = getUserById(id);
   const [newData, setNewData] = useState(user);
   const { qualitiesList } = useQualities();
@@ -79,7 +79,6 @@ const UserEditPage = ({ id }) => {
       qualities: prevState.qualities.map((q) => q.value)
     }));
     updateUser(newData);
-    updateCurrentUser();
     handleGoBack();
   };
 

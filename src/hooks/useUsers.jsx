@@ -45,18 +45,8 @@ const UsersProvider = ({ children }) => {
     return users.find((user) => user._id === userId);
   }
 
-  async function updateUser(data) {
-    try {
-      const { content } = await usersService.updateUser(data);
-      getUsers();
-      toast.success('Юзер обновлён');
-    } catch (error) {
-      errorCatcher(error);
-    }
-  }
-
   return (
-    <UsersContext.Provider value={{ users, getUserById, updateUser }}>
+    <UsersContext.Provider value={{ users, getUserById }}>
       {!isLoading ? children : <h1>Loading...</h1>}
     </UsersContext.Provider>
   );
