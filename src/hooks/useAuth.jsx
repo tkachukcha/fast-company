@@ -24,7 +24,6 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setUser] = useState();
   const [errors, setErrors] = useState(null);
   const [isLoading, setLoading] = useState(true);
-  const [isUpdated, setUpdated] = useState(true);
   const history = useHistory();
   const errorCatcher = (error) => {
     const { message } = error.response.data.error;
