@@ -23,7 +23,7 @@ const usersService = {
   },
   updateUser: async (payload) => {
     const { data } = await httpService.patch(
-      usersEndPoint + payload._id,
+      usersEndPoint + localStorageService.getUserIdToken(),
       payload
     );
     return data;

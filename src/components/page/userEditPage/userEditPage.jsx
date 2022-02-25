@@ -14,15 +14,13 @@ import { useAuth } from '../../../hooks/useAuth';
 const UserEditPage = ({ id }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { getUserById } = useUsers();
-  const { updateUser } = useAuth();
-  const user = getUserById(id);
-  const [newData, setNewData] = useState(user);
+  const { currentUser, updateUser } = useAuth();
+  const [newData, setNewData] = useState(currentUser);
   const { qualitiesList } = useQualities();
   const { professions } = useProfessions();
   const qualities = qualitiesList.map((q) => ({ label: q.name, value: q._id }));
 
-  const userQualities = user.qualities.map((qual) => ({
+  const userQualities = newData.qualities.map((qual) => ({
     label: qualities.find((q) => q.value === qual).label,
     value: qual
   }));
@@ -83,7 +81,7 @@ const UserEditPage = ({ id }) => {
   };
 
   const handleGoBack = () => {
-    history.push(`/users/${user._id}`);
+    history.push(`/users/${currentUser._id}`);
   };
 
   return (

@@ -151,7 +151,7 @@ const AuthProvider = ({ children }) => {
   async function updateUser(data) {
     try {
       const { content } = await usersService.updateUser(data);
-      console.log(content);
+      setUser(content);
       toast.success('Юзер обновлён');
     } catch (error) {
       errorCatcher(error);
