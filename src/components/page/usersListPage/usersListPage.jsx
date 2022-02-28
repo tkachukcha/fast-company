@@ -8,8 +8,9 @@ import UsersTable from '../../../components/ui/usersTable';
 import SearchForm from '../../../components/common/form/searchForm';
 import _ from 'lodash';
 import { useUsers } from '../../../hooks/useUsers';
-import { useProfessions } from '../../../hooks/useProfessions';
 import { useAuth } from '../../../hooks/useAuth';
+import { getProfessions } from '../../../store/professions';
+import { useSelector } from 'react-redux';
 
 const UsersListPage = ({ onBookmark, onDelete }) => {
   const pageSize = 4;
@@ -17,7 +18,7 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchStr, setSearchStr] = useState('');
-  const { professions } = useProfessions();
+  const professions = useSelector(getProfessions());
   const { users } = useUsers();
   const { currentUser } = useAuth();
 

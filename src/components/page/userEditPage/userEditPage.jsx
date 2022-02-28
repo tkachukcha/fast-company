@@ -6,18 +6,18 @@ import TextField from '../../common/form/textField';
 import SelectField from '../../common/form/selectField';
 import RadioField from '../../common/form/radioField';
 import { validator } from '../../../utils/validator';
-import { useQualities } from '../../../hooks/useQualities';
-import { useProfessions } from '../../../hooks/useProfessions';
-import { useUsers } from '../../../hooks/useUsers';
 import { useAuth } from '../../../hooks/useAuth';
+import { getQualities } from '../../../store/qualities';
+import { getProfessions } from '../../../store/professions';
+import { useSelector } from 'react-redux';
 
 const UserEditPage = ({ id }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const { currentUser, updateUser } = useAuth();
   const [newData, setNewData] = useState(currentUser);
-  const { qualitiesList } = useQualities();
-  const { professions } = useProfessions();
+  const qualitiesList = useSelector(getQualities());
+  const professions = useSelector(getProfessions());
   const qualities = qualitiesList.map((q) => ({ label: q.name, value: q._id }));
 
   const userQualities = newData.qualities.map((qual) => ({

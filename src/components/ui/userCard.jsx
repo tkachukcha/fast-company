@@ -4,11 +4,12 @@ import Card from '../common/card';
 import Avatar from '../common/avatar';
 import { useAuth } from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
-import { useProfessions } from '../../hooks/useProfessions';
+import { useSelector } from 'react-redux';
+import { getProfessionById } from '../../store/professions';
 
 const UserCard = ({ user }) => {
   const { currentUser } = useAuth();
-  const { getProfession } = useProfessions();
+  const profession = useSelector(getProfessionById(user.profession));
   const history = useHistory();
   const handleEdit = () => {
     history.push(`${history.location.pathname}/edit`);
@@ -28,9 +29,7 @@ const UserCard = ({ user }) => {
         <Avatar source={user.image} size="150" />
         <div className="mt-3">
           <h4>{user.name}</h4>
-          <p className="text-secondary mb-1">
-            Профессия: {getProfession(user.profession).name}
-          </p>
+          <p className="text-secondary mb-1">Профессия: {profession?.name}</p>
           <div className="text-muted">
             <i
               className="bi bi-caret-down-fill text-primary "

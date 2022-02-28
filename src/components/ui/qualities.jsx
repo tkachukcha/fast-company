@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useQualities } from '../../hooks/useQualities';
+import { getQualities, loadQualitiesList } from '../../store/qualities';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Qualities = ({ qualities }) => {
-  const { qualitiesList } = useQualities();
+  const qualitiesList = useSelector(getQualities());
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadQualitiesList());
+  }, []);
+
   const badgeClass = 'badge m-1 bg-';
   const newQualities = qualities.map((id) =>
     qualitiesList.find((q) => q._id === id)
