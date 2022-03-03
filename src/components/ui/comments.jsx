@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { orderBy } from 'lodash';
 import PropTypes from 'prop-types';
 import Card from '../common/card';
 import AddComment from './addComment';
 import Comment from '../common/comment';
 import { useComments } from '../../hooks/useComments';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addComment,
+  getComments,
+  getCommentsLoadingStatus,
+  loadCommentsList
+} from '../../store/comments';
+import { useParams } from 'react-router-dom';
+import { getCurrentUserId } from '../../store/users';
 
 const Comments = () => {
-  const { comments, createComment, removeComment } = useComments();
-
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadCommentsList(userId));
+  }, [userId]);
+  const isLoading = useSelector(getCommentsLoadingStatus());
+  const { createComment, removeComment } = useComments();
+  const comments = useSelector(getComments());
+  const currentUserId = useSelector(getCurrentUserId());
   const handleDelete = (id) => {
     removeComment(id);
   };
 
   const handleSubmit = (data) => {
-    createComment(data);
+    dispatch(addComment(data, userId, currentUserId));
   };
 
   const sortedComments = orderBy(comments, ['created_at'], ['desc']);
@@ -23,7 +39,7 @@ const Comments = () => {
       <Card classes="mb-2">
         <AddComment onSubmit={handleSubmit} />
       </Card>
-      {comments && (
+      {!isLoading ? (
         <Card>
           <h2>Comments</h2>
           <hr />
@@ -39,6 +55,8 @@ const Comments = () => {
               />
             ))}
         </Card>
+      ) : (
+        'Loading'
       )}
     </>
   );

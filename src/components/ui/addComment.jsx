@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import TextArea from '../common/form/textArea';
 import { validator } from '../../utils/validator';
 import { useComments } from '../../hooks/useComments';
+import { useDispatch } from 'react-redux';
 
 const AddComment = ({ onSubmit }) => {
-  const { createComment } = useComments();
   const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
 

@@ -3,13 +3,16 @@ import TextField from '../common/form/textField';
 import CheckBoxField from '../common/form/checkBoxField';
 import { validator } from '../../utils/validator';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthError, signIn } from '../../store/users';
 
 const LoginForm = () => {
   const history = useHistory();
   const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
-  const { signIn } = useAuth();
+  const dispatch = useDispatch();
+  const loginError = useSelector(getAuthError());
+
   const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
@@ -40,14 +43,10 @@ const LoginForm = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    try {
-      await signIn(data);
-      history.push(
-        history.location.state ? history.location.state.from.pathname : '/'
-      );
-    } catch (error) {
-      setErrors(error);
-    }
+    const redirect = history.location.state
+      ? history.location.state.from.pathname
+      : '/';
+    dispatch(signIn({ payload: data, redirect }));
   };
 
   const isValid = Object.keys(errors).length === 0;
@@ -72,6 +71,7 @@ const LoginForm = () => {
       <CheckBoxField value={data.stayOn} name="stayOn" onChange={handleChange}>
         Остаться в системе
       </CheckBoxField>
+      {loginError && <p className="text-danger">{loginError}</p>}
       <button
         type="submit"
         disabled={!isValid}

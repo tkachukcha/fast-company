@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
-import api from '../../api';
-import { useUsers } from '../../hooks/useUsers';
 import countTimeSinceComment from '../../utils/timeSinceComment';
-import { useAuth } from '../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { getUserById, getCurrentUserId } from '../../store/users';
 
 const Comment = ({ id, content, userId, createdAt, onDelete }) => {
-  const { currentUser } = useAuth();
-  const { getUserById } = useUsers();
-  const user = getUserById(userId);
-
+  const currentUserId = useSelector(getCurrentUserId());
+  const user = useSelector(getUserById(userId));
   return (
     <div className="bg-light card-body mb-3">
       <div className="row">
@@ -30,7 +27,7 @@ const Comment = ({ id, content, userId, createdAt, onDelete }) => {
                       {countTimeSinceComment(+createdAt)}
                     </span>
                   </p>
-                  {currentUser._id === userId && (
+                  {currentUserId === userId && (
                     <button
                       className="btn btn-sm text-primary d-flex align-items-center"
                       onClick={() => onDelete(id)}

@@ -6,20 +6,20 @@ import TextField from '../../common/form/textField';
 import SelectField from '../../common/form/selectField';
 import RadioField from '../../common/form/radioField';
 import { validator } from '../../../utils/validator';
-import { useAuth } from '../../../hooks/useAuth';
 import { getQualities } from '../../../store/qualities';
 import { getProfessions } from '../../../store/professions';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentUserData, updateUser } from '../../../store/users';
 
 const UserEditPage = ({ id }) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { currentUser, updateUser } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
   const [newData, setNewData] = useState(currentUser);
   const qualitiesList = useSelector(getQualities());
   const professions = useSelector(getProfessions());
   const qualities = qualitiesList.map((q) => ({ label: q.name, value: q._id }));
-
+  const dispatch = useDispatch();
   const userQualities = newData.qualities.map((qual) => ({
     label: qualities.find((q) => q.value === qual).label,
     value: qual
@@ -72,11 +72,8 @@ const UserEditPage = ({ id }) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    setNewData((prevState) => ({
-      ...prevState,
-      qualities: prevState.qualities.map((q) => q.value)
-    }));
-    updateUser(newData);
+    setNewData({ ...newData });
+    dispatch(updateUser(newData));
     handleGoBack();
   };
 

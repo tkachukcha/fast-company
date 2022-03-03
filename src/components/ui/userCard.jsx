@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '../common/card';
 import Avatar from '../common/avatar';
-import { useAuth } from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getProfessionById } from '../../store/professions';
+import { getCurrentUserId } from '../../store/users';
 
 const UserCard = ({ user }) => {
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
   const profession = useSelector(getProfessionById(user.profession));
   const history = useHistory();
   const handleEdit = () => {
@@ -16,7 +16,7 @@ const UserCard = ({ user }) => {
   };
   return (
     <Card>
-      {currentUser._id === user._id && (
+      {currentUserId === user._id && (
         <button
           className="position-absolute top-0 end-0 btn  btn-light btn-sm"
           onClick={handleEdit}

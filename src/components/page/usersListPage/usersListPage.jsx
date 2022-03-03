@@ -7,10 +7,9 @@ import SearchStatus from '../../../components/ui/searchStatus';
 import UsersTable from '../../../components/ui/usersTable';
 import SearchForm from '../../../components/common/form/searchForm';
 import _ from 'lodash';
-import { useUsers } from '../../../hooks/useUsers';
-import { useAuth } from '../../../hooks/useAuth';
 import { getProfessions } from '../../../store/professions';
 import { useSelector } from 'react-redux';
+import { getCurrentUserId, getUsers } from '../../../store/users';
 
 const UsersListPage = ({ onBookmark, onDelete }) => {
   const pageSize = 4;
@@ -19,8 +18,8 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchStr, setSearchStr] = useState('');
   const professions = useSelector(getProfessions());
-  const { users } = useUsers();
-  const { currentUser } = useAuth();
+  const users = useSelector(getUsers());
+  const currentUserId = useSelector(getCurrentUserId());
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -51,7 +50,7 @@ const UsersListPage = ({ onBookmark, onDelete }) => {
         }
       }
     }
-    return filteredUsers.filter((u) => u._id !== currentUser._id);
+    return filteredUsers.filter((u) => u._id !== currentUserId);
   }
   const filteredUsers = filterUsers(users);
   const count = filteredUsers ? filteredUsers.length : undefined;
