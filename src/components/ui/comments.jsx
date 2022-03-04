@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import Card from '../common/card';
 import AddComment from './addComment';
 import Comment from '../common/comment';
-import { useComments } from '../../hooks/useComments';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addComment,
+  removeComment,
   getComments,
   getCommentsLoadingStatus,
   loadCommentsList
@@ -22,11 +22,10 @@ const Comments = () => {
     dispatch(loadCommentsList(userId));
   }, [userId]);
   const isLoading = useSelector(getCommentsLoadingStatus());
-  const { createComment, removeComment } = useComments();
   const comments = useSelector(getComments());
   const currentUserId = useSelector(getCurrentUserId());
   const handleDelete = (id) => {
-    removeComment(id);
+    dispatch(removeComment(id));
   };
 
   const handleSubmit = (data) => {

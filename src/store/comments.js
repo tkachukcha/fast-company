@@ -24,7 +24,16 @@ const commentsSlice = createSlice({
       state.entities.push(action.payload);
     },
     commentRemoved: (state, action) => {
-      state.entities.filter((e) => e._id !== action.payload._id);
+      const newEntities = state.entities.filter(
+        (e) => e._id !== action.payload
+      );
+      state.entities = newEntities;
+    },
+    commentRemovalFailed: (state, action) => {
+      state.error = action.payload;
+    },
+    commentAdditionFailed: (state, action) => {
+      state.error = action.payload;
     }
   }
 });
@@ -35,17 +44,17 @@ const {
   commentsReceived,
   commentsRequestFailed,
   commentAdded,
-  commentRemoved
+  commentRemoved,
+  commentRemovalFailed,
+  commentAdditionFailed
 } = actions;
 
 const commentAdditionRequested = createAction(
   'comments/commentAdditionRequested'
 );
-const commentAdditionFailed = createAction('comments/commentAdditionFailed');
 const commentRemovalRequested = createAction(
   'comments/commentRemovalRequested'
 );
-const commentRemovalFailed = createAction('comments/commentRemovalFailed');
 
 export const loadCommentsList = (userId) => async (dispatch) => {
   dispatch(commentsRequested());
@@ -76,6 +85,18 @@ export const addComment = (data, pageId, userId) => async (dispatch) => {
     dispatch(commentAdded(content));
   } catch (error) {
     dispatch(commentAdditionFailed(error.message));
+  }
+};
+
+export const removeComment = (id) => async (dispatch) => {
+  dispatch(commentRemovalRequested());
+  try {
+    const { content } = await commentsService.removeComment(id);
+    if (content === null) {
+      dispatch(commentRemoved(id));
+    }
+  } catch (error) {
+    dispatch(commentRemovalFailed(error.message));
   }
 };
 
