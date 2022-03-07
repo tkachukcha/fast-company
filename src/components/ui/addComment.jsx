@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextArea from '../common/form/textArea';
 import { validator } from '../../utils/validator';
-import { useComments } from '../../hooks/useComments';
-import { useDispatch } from 'react-redux';
 
 const AddComment = ({ onSubmit }) => {
   const [data, setData] = useState({});
